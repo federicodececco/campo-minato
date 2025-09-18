@@ -4,7 +4,7 @@ enum Grades {
   hard = "HARD",
 }
 
-class Grid {
+export class Grid {
   sideLength: number;
   difficulty: Grades;
   constructor(x: number, difficulty: Grades = Grades.easy) {
@@ -13,12 +13,12 @@ class Grid {
   }
 }
 
-class Casella {
+export class Casella {
   bomba: boolean;
-  prossimità: number;
-  constructor(bomba: boolean = false, prossimità: number = 0) {
+  proximity: number;
+  constructor(bomba: boolean = false, proximity: number = 0) {
     this.bomba = bomba;
-    this.prossimità = prossimità;
+    this.proximity = proximity;
   }
 }
 
@@ -33,7 +33,7 @@ function getRandomInt(min: number, max: number): number {
  ** {number} bombe: numero di bombe
  *
  */
-function generateGrid(board: Grid, bombe?: number): Casella[][] {
+export function generateGrid(board: Grid, bombe?: number): Casella[][] {
   const n = board.sideLength;
 
   let grid: Casella[][] = [];
@@ -55,8 +55,8 @@ function generateGrid(board: Grid, bombe?: number): Casella[][] {
   let i = 0;
   /* posiziona le bombe sulla board */
   while (i < numBombe) {
-    let x = getRandomInt(0, n);
-    let y = getRandomInt(0, n);
+    let x = getRandomInt(0, n - 1);
+    let y = getRandomInt(0, n - 1);
 
     if (!grid[y][x].bomba) {
       grid[y][x].bomba = true;
@@ -74,7 +74,7 @@ function generateGrid(board: Grid, bombe?: number): Casella[][] {
             newX < n &&
             !(k === 0 && j === 0)
           ) {
-            grid[newY][newX].prossimità++;
+            grid[newY][newX].proximity++;
           }
         }
       }
