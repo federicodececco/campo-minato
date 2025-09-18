@@ -1,21 +1,42 @@
 "use client";
 
 import { Casella } from "@/lib/gridUtils";
+import Card from "./Card";
+import { useEffect, useState } from "react";
 
 interface GridInterface {
   grid: Casella[][];
 }
 
-export default function GridComponent({ grid }: GridInterface) {
+export default function GridComponent({ grid: initialGrid }: GridInterface) {
+  const [grid, setGrid] = useState(initialGrid);
+
   const handleCellClick = (row: number, col: number) => {
-    console.log(`Clicked cell: ${row}, ${col}`);
-    console.log(`Bomba: ${grid[row][col].bomba}`);
-    console.log(`Prossimità: ${grid[row][col].prossimità}`);
+    grid[row][col].turned = true;
+
+    setGrid((prevGrid) => {
+      const newGrid = prevGrid.map((gridRow, rowIndex) =>
+        gridRow.map((cell, colIndex) => {
+          if (rowIndex === row && colIndex === col) {
+            return { ...cell, turned: true };
+          }
+          return cell;
+        })
+      );
+      return newGrid;
+    });
   };
+
+  function explosion(): void {
+    console.log("kaboom");
+  }
+  useEffect(() => {
+    setGrid(initialGrid);
+  }, [initialGrid]);
 
   return (
     <div
-      className="grid gap-1 p-4"
+      className="grid gap-1 p-4 bg-white"
       style={{
         gridTemplateColumns: `repeat(${grid.length}, 1fr)`,
         maxWidth: `${grid.length * 40}px`,
@@ -23,13 +44,17 @@ export default function GridComponent({ grid }: GridInterface) {
     >
       {grid.map((row, rowIndex) =>
         row.map((cell, colIndex) => (
-          <button
+          <div
             key={`${rowIndex}-${colIndex}`}
             onClick={() => handleCellClick(rowIndex, colIndex)}
-            className="w-8 h-8 border border-gray-400 bg-gray-200 hover:bg-gray-300 text-black text-sm font-bold flex items-center justify-center"
           >
-            {cell.bomba ? "boom" : cell.prossimità > 0 ? cell.prossimità : ""}
-          </button>
+            <Card
+              turned={cell.turned || false}
+              proximity={cell.proximity || 0}
+              bomba={cell.bomba || false}
+              explosion={explosion}
+            />
+          </div>
         ))
       )}
     </div>

@@ -16,9 +16,15 @@ export class Grid {
 export class Casella {
   bomba: boolean;
   proximity: number;
-  constructor(bomba: boolean = false, proximity: number = 0) {
+  turned: boolean;
+  constructor(
+    bomba: boolean = false,
+    proximity: number = 0,
+    turned: boolean = false
+  ) {
     this.bomba = bomba;
     this.proximity = proximity;
+    this.turned = turned;
   }
 }
 

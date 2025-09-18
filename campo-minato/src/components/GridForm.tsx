@@ -31,7 +31,7 @@ export default function GridForm() {
     <div>
       <form onSubmit={handleSubmit} className="mb-4">
         <label htmlFor="length" className="block mb-2">
-          Inserisci lunghezza della tabella
+          Inserisci la dimensione del lato della tabella
         </label>
         <input
           type="number"
