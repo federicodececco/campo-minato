@@ -1,6 +1,7 @@
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Star from "./Star";
+import Classifica from "./Classifica";
 
 interface EndInterface {
   victory: boolean;
@@ -16,6 +17,8 @@ export default function EndPopUp({
   const [displayedScore, setDisplayedScore] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showStars, setShowStars] = useState(false);
+  const [activeTab, setActiveTab] =
+    useState(true); /* true= puntegigo, false classifica */
 
   const calculateStars = () => {
     if (!punteggioMax || punteggioMax === 0) return 3;
@@ -51,6 +54,7 @@ export default function EndPopUp({
           requestAnimationFrame(updateCounter);
         } else {
           setIsAnimating(false);
+          /* stars */
           setTimeout(() => setShowStars(true), 500);
         }
       };
@@ -68,56 +72,86 @@ export default function EndPopUp({
       <div className="bg-black/70 absolute top-0 h-screen w-screen">
         <div className="text-white absolute top-[50%] left-[50%] -translate-1/2">
           {/* center popup */}
-          <section className="bg-black py-20 px-40 rounded-2xl">
-            Hai Vinto!
-            <div className="relative">
-              <div
-                className={`text-6xl text-white bg-clip-text bg-gradient-to-r transition-all duration-300 ${
-                  isAnimating ? "animate-pulse" : "scale-110"
-                }`}
+          <div className="border-3 border-black rounded-2xl p-1 bg-amber-300 w-xl h-100 grid grid-rows-10">
+            {/* button container */}
+            <div className="grid grid-cols-2 gap-0 w-full row-span-1 ">
+              <button
+                className="bg-green-700 rounded-tl-2xl w-full col-span-1 border-r border-black"
+                onClick={() => setActiveTab(true)}
               >
-                {displayedScore.toLocaleString()}
-              </div>
+                partita
+              </button>
+              <button
+                className="bg-purple-300 rounded-tr-2xl w-full col-span-1  border-l border-black"
+                onClick={() => setActiveTab(false)}
+              >
+                classifica
+              </button>
             </div>
-            <div className="mb-6">
-              <div className="flex justify-center space-x-2 mb-4">
-                {[0, 1, 2].map((index) => (
-                  <Star
-                    index={index}
-                    filled={index < starsNumber}
-                    showStars={showStars}
-                    key={index}
-                  />
-                ))}
-              </div>
-              <div className="text-sm text-gray-400">
-                <p>
-                  {displayedScore.toLocaleString()} /
-                  {punteggioMax
-                    ? punteggioMax.toLocaleString()
-                    : displayedScore.toLocaleString()}
-                </p>
-                <p className="mt-1">
-                  {starsNumber === 3 && (
-                    <span className="text-yellow-400 font-bold">Perfetto!</span>
-                  )}
-                  {starsNumber === 2 && (
-                    <span className="text-yellow-400 font-bold">
-                      Ottimo lavoro!
-                    </span>
-                  )}
-                  {starsNumber === 1 && (
-                    <span className="text-yellow-400 font-bold">
-                      Ben fatto!
-                    </span>
-                  )}
-                  {starsNumber === 0 && (
-                    <span className="text-yellow-400">Puoi fare meglio!</span>
-                  )}
-                </p>
-              </div>
+            {/* page container */}
+            <div className="row-span-9">
+              {activeTab && (
+                <section className="bg-green-700 py-10 px-40 rounded-2xl rounded-t-none w-full h-full">
+                  <div></div>
+                  Hai Vinto!
+                  <div className="relative">
+                    <div
+                      className={`text-6xl text-white bg-clip-text bg-gradient-to-r transition-all duration-300 ${
+                        isAnimating ? "animate-pulse" : "scale-110"
+                      }`}
+                    >
+                      {displayedScore.toLocaleString()}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex justify-center space-x-2 ">
+                      {[0, 1, 2].map((index) => (
+                        <Star
+                          index={index}
+                          filled={index < starsNumber}
+                          showStars={showStars}
+                          key={index}
+                        />
+                      ))}
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      <p>
+                        {displayedScore.toLocaleString()} /
+                        {punteggioMax
+                          ? punteggioMax.toLocaleString()
+                          : displayedScore.toLocaleString()}
+                      </p>
+                      <p className="pt-1">
+                        {starsNumber === 3 && (
+                          <span className="text-yellow-400 font-bold">
+                            Perfetto!
+                          </span>
+                        )}
+                        {starsNumber === 2 && (
+                          <span className="text-yellow-400 font-bold">
+                            Ottimo lavoro!
+                          </span>
+                        )}
+                        {starsNumber === 1 && (
+                          <span className="text-yellow-400 font-bold">
+                            Ben fatto!
+                          </span>
+                        )}
+                        {starsNumber === 0 && (
+                          <span className="text-yellow-400">
+                            Puoi fare meglio!
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <button>salva</button>
+                  <button>nuova partita</button>
+                </section>
+              )}
+              {!activeTab && <Classifica />}
             </div>
-          </section>
+          </div>
         </div>
       </div>
     </>
