@@ -69,7 +69,7 @@ export default function EndPopUp({
 
   return (
     <>
-      <div className="bg-black/70 absolute top-0 h-screen w-screen">
+      <div className="bg-black/70 absolute top-0 h-screen w-screen z-10">
         <div className="text-white absolute top-[50%] left-[50%] -translate-1/2">
           {/* center popup */}
           <div className="border-3 border-black rounded-2xl p-1 bg-amber-300 w-xl h-100 grid grid-rows-10">

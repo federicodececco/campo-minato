@@ -3,14 +3,14 @@
 import { Casella } from "@/lib/gridUtils";
 import Card from "./Card";
 import { useEffect, useState } from "react";
-
+import { useGameStateContext } from "@/context/GameStateContext";
 interface GridInterface {
   grid: Casella[][];
 }
 
 export default function GridComponent({ grid: initialGrid }: GridInterface) {
   const [grid, setGrid] = useState(initialGrid);
-
+  const { setHasEnded } = useGameStateContext();
   const handleCellClick = (row: number, col: number) => {
     grid[row][col].turned = true;
 
@@ -29,17 +29,19 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
 
   function explosion(): void {
     console.log("kaboom");
+    setHasEnded(true);
   }
 
   function checkEnd(grid: Casella[][]): boolean {
     grid.forEach((row) => {
       row.forEach((elem) => {
-        if (!elem.bomba && elem.turned) {
-          return true; /* each card without a bomb on it has been turned  */
+        if (!elem.bomba && !elem.turned) {
+          return false;
         }
       });
     });
-    return false;
+    setHasEnded(true);
+    return true; /* each card without a bomb on it has been turned  */
   }
 
   useEffect(() => {
