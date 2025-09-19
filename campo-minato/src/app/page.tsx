@@ -1,12 +1,15 @@
 import { Grid, generateGrid } from "@/lib/gridUtils";
 import GridForm from "@/components/GridForm";
+
+import EndPopUp from "@/components/EndPopUp";
+import HomePage from "@/pages/HomePage";
+
 export default function Home() {
   return (
     <>
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Campo Minato</h1>
-        <GridForm></GridForm>
-      </div>
+      <section>
+        <HomePage></HomePage>
+      </section>
     </>
   );
 }

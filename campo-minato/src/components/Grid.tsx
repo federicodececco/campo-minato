@@ -30,6 +30,18 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
   function explosion(): void {
     console.log("kaboom");
   }
+
+  function checkEnd(grid: Casella[][]): boolean {
+    grid.forEach((row) => {
+      row.forEach((elem) => {
+        if (!elem.bomba && elem.turned) {
+          return true; /* each card without a bomb on it has been turned  */
+        }
+      });
+    });
+    return false;
+  }
+
   useEffect(() => {
     setGrid(initialGrid);
   }, [initialGrid]);
