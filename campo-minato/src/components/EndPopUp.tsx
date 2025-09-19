@@ -2,16 +2,17 @@ import { faL } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Star from "./Star";
 import Classifica from "./Classifica";
+import { useGameStateContext } from "@/context/GameStateContext";
 
 interface EndInterface {
   victory: boolean;
-  punteggio: number;
+
   punteggioMax?: number;
 }
 
 export default function EndPopUp({
   victory,
-  punteggio,
+
   punteggioMax,
 }: EndInterface) {
   const [displayedScore, setDisplayedScore] = useState(0);
@@ -20,10 +21,11 @@ export default function EndPopUp({
   const [activeTab, setActiveTab] =
     useState(true); /* true= puntegigo, false classifica */
 
+  const { score } = useGameStateContext();
   const calculateStars = () => {
     if (!punteggioMax || punteggioMax === 0) return 3;
 
-    const percentage = (punteggio / punteggioMax) * 100;
+    const percentage = (score / punteggioMax) * 100;
     if (percentage >= 90) return 3;
     if (percentage >= 70) return 2;
     if (percentage >= 50) return 1;
@@ -46,7 +48,7 @@ export default function EndPopUp({
         const easeOutQuart = 1 - Math.pow(1 - progress, 4);
 
         const current = Math.floor(
-          startValue + (punteggio - startValue) * easeOutQuart
+          startValue + (score - startValue) * easeOutQuart
         );
         setDisplayedScore(current);
 
@@ -65,7 +67,7 @@ export default function EndPopUp({
     const timer = setTimeout(animateCounter, 300);
 
     return () => clearTimeout(timer);
-  }, [punteggio]);
+  }, [score]);
 
   return (
     <>

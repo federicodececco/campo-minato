@@ -10,9 +10,13 @@ interface GridInterface {
 
 export default function GridComponent({ grid: initialGrid }: GridInterface) {
   const [grid, setGrid] = useState(initialGrid);
-  const { setHasEnded } = useGameStateContext();
+  const { setHasEnded, setScore, score } = useGameStateContext();
   const handleCellClick = (row: number, col: number) => {
     grid[row][col].turned = true;
+
+    if (!grid[row][col].bomba) {
+      changeScore(grid[row][col]);
+    }
 
     setGrid((prevGrid) => {
       const newGrid = prevGrid.map((gridRow, rowIndex) =>
@@ -26,6 +30,11 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
       return newGrid;
     });
   };
+  function changeScore(cell: Casella): void {
+    setScore(
+      score + cell.proximity
+    ); /* punteggio dato dal valore di prossimità */
+  }
 
   function explosion(): void {
     console.log("kaboom");
