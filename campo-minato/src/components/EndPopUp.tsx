@@ -10,18 +10,14 @@ interface EndInterface {
   punteggioMax?: number;
 }
 
-export default function EndPopUp({
-  victory,
-
-  punteggioMax,
-}: EndInterface) {
+export default function EndPopUp({ victory, punteggioMax }: EndInterface) {
   const [displayedScore, setDisplayedScore] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showStars, setShowStars] = useState(false);
   const [activeTab, setActiveTab] =
     useState(true); /* true= puntegigo, false classifica */
 
-  const { score } = useGameStateContext();
+  const { score, resetGameState } = useGameStateContext();
   const calculateStars = () => {
     if (!punteggioMax || punteggioMax === 0) return 3;
 
@@ -93,7 +89,7 @@ export default function EndPopUp({
             {/* page container */}
             <div className="row-span-9">
               {activeTab && (
-                <section className="bg-green-700 py-10 px-40 rounded-2xl rounded-t-none w-full h-full">
+                <section className="bg-green-700 py-10 px-20 rounded-2xl rounded-t-none w-full h-full">
                   <div></div>
                   Hai Vinto!
                   <div className="relative">
@@ -147,8 +143,17 @@ export default function EndPopUp({
                       </p>
                     </div>
                   </div>
-                  <button>salva</button>
-                  <button>nuova partita</button>
+                  <div className=" grid grid-cols-5 pt-8">
+                    <button
+                      onClick={() => resetGameState()}
+                      className="text-xl bg-amber-300 text-green-700 border-black border p-2 col-span-2 rounded-xl hover:bg-green-700 hover:text-amber-300 hover:border-0"
+                    >
+                      Nuova Partita
+                    </button>
+                    <button className="col-start-4 col-span-2 hover:bg-amber-300 border-black hover:border p-2 text-lg rounded-xl hover:text-green-700 bg-green-700 text-amber-300 border-0">
+                      salva
+                    </button>
+                  </div>
                 </section>
               )}
               {!activeTab && <Classifica />}

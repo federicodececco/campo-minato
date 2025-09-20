@@ -2,10 +2,12 @@
 
 import EndPopUp from "@/components/EndPopUp";
 import GridForm from "@/components/GridForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useGameStateContext } from "@/context/GameStateContext";
 export default function HomePage() {
   const { hasEnded } = useGameStateContext();
+
+  useEffect(() => {}, [hasEnded]);
 
   return (
     <div className="container relative">

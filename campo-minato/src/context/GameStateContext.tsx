@@ -13,6 +13,7 @@ interface GameStateContextInterface {
   setDifficulty: Function;
   maxScore: number;
   setMaxScore: Function;
+  resetGameState: Function;
 }
 interface GameStateProviderChildrenInterface {
   children: ReactNode;
@@ -39,6 +40,7 @@ const initalState: GameStateContextInterface = {
   setMaxScore: () => {
     throw new Error("setMaxScore called outside provider");
   },
+  resetGameState: (): void => {},
 };
 
 const GameStateContext = createContext<GameStateContextInterface>(initalState);
@@ -49,8 +51,17 @@ export function GameStateProvider({
   const [hasEnded, setHasEnded] = useState(false);
   const [time, setTime] = useState(0);
   const [score, setScore] = useState(0);
-  const [difficutly, setDifficulty] = useState("");
+  const [difficulty, setDifficulty] = useState("");
   const [maxScore, setMaxScore] = useState(0);
+
+  function resetGameState(): void {
+    setHasEnded(false);
+    setTime(0);
+    setScore(0);
+    setDifficulty("");
+    setMaxScore(0);
+  }
+
   const value = {
     hasEnded,
     setHasEnded,
@@ -58,10 +69,11 @@ export function GameStateProvider({
     setScore,
     time,
     setTime,
-    difficutly,
+    difficulty,
     setDifficulty,
     maxScore,
     setMaxScore,
+    resetGameState,
   };
   return (
     <GameStateContext.Provider value={value}>
