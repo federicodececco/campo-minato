@@ -1,5 +1,6 @@
 "use client";
 
+import { Casella, Settings } from "@/lib/gridUtils";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface GameStateContextInterface {
@@ -13,7 +14,12 @@ interface GameStateContextInterface {
   setDifficulty: Function;
   maxScore: number;
   setMaxScore: Function;
+  grid: Casella[][] | undefined;
+  setGrid: Function;
+  settings: Settings | undefined;
+  setSettings: Function;
   resetGameState: Function;
+  gameResetKey: number;
 }
 interface GameStateProviderChildrenInterface {
   children: ReactNode;
@@ -40,7 +46,16 @@ const initalState: GameStateContextInterface = {
   setMaxScore: () => {
     throw new Error("setMaxScore called outside provider");
   },
+  grid: undefined,
+  setGrid: () => {
+    throw new Error("setGrid called outside provider");
+  },
+  settings: undefined,
+  setSettings: () => {
+    throw new Error("setSettings called outside provider");
+  },
   resetGameState: (): void => {},
+  gameResetKey: 0,
 };
 
 const GameStateContext = createContext<GameStateContextInterface>(initalState);
@@ -53,6 +68,9 @@ export function GameStateProvider({
   const [score, setScore] = useState(0);
   const [difficulty, setDifficulty] = useState("");
   const [maxScore, setMaxScore] = useState(0);
+  const [grid, setGrid] = useState<Casella[][] | null>(null);
+  const [settings, setSettings] = useState<Settings | null>(null);
+  const [gameResetKey, setGameResetKey] = useState(0);
 
   function resetGameState(): void {
     setHasEnded(false);
@@ -60,6 +78,16 @@ export function GameStateProvider({
     setScore(0);
     setDifficulty("");
     setMaxScore(0);
+    setGameResetKey((prev) => prev + 1);
+    if (grid) {
+      const newGrid = grid.map((row) =>
+        row.map((cell) => ({
+          ...cell,
+          turned: false,
+        }))
+      );
+      setGrid(newGrid);
+    }
   }
 
   const value = {
@@ -73,7 +101,12 @@ export function GameStateProvider({
     setDifficulty,
     maxScore,
     setMaxScore,
+    grid,
+    setGrid,
+    settings,
+    setSettings,
     resetGameState,
+    gameResetKey,
   };
   return (
     <GameStateContext.Provider value={value}>

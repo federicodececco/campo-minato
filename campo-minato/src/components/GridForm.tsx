@@ -1,14 +1,15 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import { generateGrid, Casella, Grid } from "@/lib/gridUtils";
+import { useState } from "react";
+import { generateGrid, Casella, Grid, Settings } from "@/lib/gridUtils";
 import GridComponent from "./Grid";
-import EndPopUp from "./EndPopUp";
+import { useGameStateContext } from "@/context/GameStateContext";
 export default function GridForm() {
-  const [grid, setGrid] = useState<Casella[][] | null>(null);
   const [formData, setFormData] = useState({
     length: 0,
   });
+  const { resetGameState, setSettings, grid, setGrid, gameResetKey } =
+    useGameStateContext();
 
   function handleInputChange(e) {
     const { name, value } = e.currentTarget;
@@ -22,9 +23,12 @@ export default function GridForm() {
 
   function handleSubmit(e) {
     e.preventDefault();
+    resetGameState();
     const length = formData.length;
     const newGrid = new Grid(length);
     const displayGrid = generateGrid(newGrid);
+    const set = new Settings(length, "easy");
+    setSettings(set);
     setGrid(displayGrid);
   }
 
@@ -51,7 +55,7 @@ export default function GridForm() {
           Genera Griglia
         </button>
       </form>
-      {grid && <GridComponent grid={grid} />}
+      {grid && <GridComponent grid={grid} key={gameResetKey} />}
     </div>
   );
 }

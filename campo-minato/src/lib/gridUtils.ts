@@ -4,6 +4,15 @@ enum Grades {
   hard = "HARD",
 }
 
+export class Settings {
+  length: number;
+  difficulty: string;
+  constructor(x: number, difficulty: string) {
+    this.difficulty = difficulty;
+    this.length = x;
+  }
+}
+
 export class Grid {
   sideLength: number;
   difficulty: Grades;

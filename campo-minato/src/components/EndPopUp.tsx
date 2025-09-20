@@ -6,11 +6,15 @@ import { useGameStateContext } from "@/context/GameStateContext";
 
 interface EndInterface {
   victory: boolean;
-
+  handleClosePopUp: () => void;
   punteggioMax?: number;
 }
 
-export default function EndPopUp({ victory, punteggioMax }: EndInterface) {
+export default function EndPopUp({
+  victory,
+  punteggioMax,
+  handleClosePopUp,
+}: EndInterface) {
   const [displayedScore, setDisplayedScore] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [showStars, setShowStars] = useState(false);
@@ -18,6 +22,12 @@ export default function EndPopUp({ victory, punteggioMax }: EndInterface) {
     useState(true); /* true= puntegigo, false classifica */
 
   const { score, resetGameState } = useGameStateContext();
+
+  const newGame = (): void => {
+    resetGameState();
+    handleClosePopUp();
+  };
+
   const calculateStars = () => {
     if (!punteggioMax || punteggioMax === 0) return 3;
 
@@ -75,7 +85,10 @@ export default function EndPopUp({ victory, punteggioMax }: EndInterface) {
             <div className="grid grid-cols-2 gap-0 w-full row-span-1 ">
               <button
                 className="bg-green-700 rounded-tl-2xl w-full col-span-1 border-r border-black"
-                onClick={() => setActiveTab(true)}
+                onClick={() => {
+                  setActiveTab(true);
+                  handleClosePopUp();
+                }}
               >
                 partita
               </button>
@@ -145,7 +158,7 @@ export default function EndPopUp({ victory, punteggioMax }: EndInterface) {
                   </div>
                   <div className=" grid grid-cols-5 pt-8">
                     <button
-                      onClick={() => resetGameState()}
+                      onClick={() => newGame()}
                       className="text-xl bg-amber-300 text-green-700 border-black border p-2 col-span-2 rounded-xl hover:bg-green-700 hover:text-amber-300 hover:border-0"
                     >
                       Nuova Partita

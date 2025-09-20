@@ -5,13 +5,23 @@ import GridForm from "@/components/GridForm";
 import { useEffect, useState } from "react";
 import { useGameStateContext } from "@/context/GameStateContext";
 export default function HomePage() {
-  const { hasEnded } = useGameStateContext();
+  const { hasEnded, setHasEnded } = useGameStateContext();
+
+  const handleClosePopUp = (): void => {
+    setHasEnded(false);
+  };
 
   useEffect(() => {}, [hasEnded]);
 
   return (
     <div className="container relative">
-      {hasEnded && <EndPopUp victory={true} punteggioMax={40}></EndPopUp>}
+      {hasEnded && (
+        <EndPopUp
+          victory={true}
+          punteggioMax={40}
+          onClose={handleClosePopUp}
+        ></EndPopUp>
+      )}
       <div className="mx-auto p-4">
         <h1 className="text-2xl font-bold mb-4">Campo Minato</h1>
 
