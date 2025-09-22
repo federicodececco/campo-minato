@@ -4,13 +4,24 @@ import { Casella } from "@/lib/gridUtils";
 import Card from "./Card";
 import { useEffect, useState } from "react";
 import { useGameStateContext } from "@/context/GameStateContext";
+import { getLeaderBoard } from "@/lib/supabase";
 interface GridInterface {
   grid: Casella[][];
 }
 
 export default function GridComponent({ grid: initialGrid }: GridInterface) {
   const [grid, setGrid] = useState(initialGrid);
-  const { setHasEnded, setScore, score } = useGameStateContext();
+  const { setHasEnded, setScore, score, setFetchedLeaderBoard } =
+    useGameStateContext();
+
+  const fetchLeaderBoard = async () => {
+    try {
+      const leaderBoardData = await getLeaderBoard(5);
+      console.log(leaderBoardData);
+      setFetchedLeaderBoard(leaderBoardData);
+    } catch (error) {}
+  };
+
   const handleCellClick = (row: number, col: number) => {
     grid[row][col].turned = true;
 
@@ -52,7 +63,9 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
     setHasEnded(true);
     return true; /* each card without a bomb on it has been turned  */
   }
-
+  useEffect(() => {
+    fetchLeaderBoard();
+  }, []);
   useEffect(() => {
     setGrid(initialGrid);
   }, [initialGrid]);

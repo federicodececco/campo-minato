@@ -1,6 +1,7 @@
 "use client";
 
 import { Casella, Settings } from "@/lib/gridUtils";
+import { LeaderBoardEntry } from "@/lib/supabase";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 interface GameStateContextInterface {
@@ -16,6 +17,8 @@ interface GameStateContextInterface {
   setMaxScore: Function;
   grid: Casella[][] | undefined;
   setGrid: Function;
+  fetchedLeaderBoard: LeaderBoardEntry[] | undefined;
+  setFetchedLeaderBoard: Function;
   settings: Settings | undefined;
   setSettings: Function;
   resetGameState: Function;
@@ -50,6 +53,10 @@ const initalState: GameStateContextInterface = {
   setGrid: () => {
     throw new Error("setGrid called outside provider");
   },
+  fetchedLeaderBoard: undefined,
+  setFetchedLeaderBoard: () => {
+    throw new Error("setGrid called outside provider");
+  },
   settings: undefined,
   setSettings: () => {
     throw new Error("setSettings called outside provider");
@@ -68,9 +75,10 @@ export function GameStateProvider({
   const [score, setScore] = useState(0);
   const [difficulty, setDifficulty] = useState("");
   const [maxScore, setMaxScore] = useState(0);
-  const [grid, setGrid] = useState<Casella[][] | null>(null);
-  const [settings, setSettings] = useState<Settings | null>(null);
+  const [grid, setGrid] = useState<Casella[][] | undefined>(undefined);
+  const [settings, setSettings] = useState<Settings | undefined>(undefined);
   const [gameResetKey, setGameResetKey] = useState(0);
+  const [fetchedLeaderBoard, setFetchedLeaderBoard] = useState();
 
   function resetGameState(): void {
     setHasEnded(false);
@@ -103,6 +111,8 @@ export function GameStateProvider({
     setMaxScore,
     grid,
     setGrid,
+    fetchedLeaderBoard,
+    setFetchedLeaderBoard,
     settings,
     setSettings,
     resetGameState,

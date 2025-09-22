@@ -2,12 +2,12 @@
 
 import EndPopUp from "@/components/EndPopUp";
 import GridForm from "@/components/GridForm";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useGameStateContext } from "@/context/GameStateContext";
 export default function HomePage() {
   const { hasEnded, setHasEnded } = useGameStateContext();
 
-  const handleClosePopUp = (): void => {
+  const handleClosePopUp = () => {
     setHasEnded(false);
   };
 

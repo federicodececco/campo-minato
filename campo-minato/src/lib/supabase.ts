@@ -5,25 +5,23 @@ const supabseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY!;
 export const supabase = createClient(supabaseUrl, supabseKey);
 
 export class LeaderBoardEntry {
-  name: string;
+  username: string;
   score: number;
   difficulty: string;
   stage: number | undefined;
   time: number;
-  createdAt: string;
   constructor(
-    name: string,
+    username: string,
     score: number,
     difficulty: string,
     time: number,
     stage?: number
   ) {
-    this.name = name;
+    this.username = username;
     this.score = score;
     this.difficulty = difficulty;
     this.stage = stage ? stage : undefined;
     this.time = time;
-    this.createdAt = new Date().getTime.toString();
   }
 }
 
