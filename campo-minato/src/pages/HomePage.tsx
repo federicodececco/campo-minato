@@ -22,7 +22,7 @@ export default function HomePage() {
           onClose={handleClosePopUp}
         ></EndPopUp>
       )}
-      <div className="mx-auto p-4">
+      <div className="mx-auto p-4 w-screen">
         <h1 className="text-2xl font-bold mb-4">Campo Minato</h1>
 
         <GridForm></GridForm>

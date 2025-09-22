@@ -4,10 +4,12 @@ import { useState } from "react";
 import { generateGrid, Casella, Grid, Settings } from "@/lib/gridUtils";
 import GridComponent from "./Grid";
 import { useGameStateContext } from "@/context/GameStateContext";
+import Buttons from "./Buttons";
 export default function GridForm() {
   const [formData, setFormData] = useState({
     length: 0,
   });
+  const [dimension, setDimension] = useState(0);
   const { resetGameState, setSettings, grid, setGrid, gameResetKey } =
     useGameStateContext();
 
@@ -24,36 +26,49 @@ export default function GridForm() {
   function handleSubmit(e) {
     e.preventDefault();
     resetGameState();
-    const length = formData.length;
+    const length = dimension;
     const newGrid = new Grid(length);
     const displayGrid = generateGrid(newGrid);
     const set = new Settings(length, "easy");
     setSettings(set);
     setGrid(displayGrid);
   }
+  const handleEasyClick = () => {
+    setDimension(10);
+  };
+  const handleMediumClick = () => {
+    setDimension(15);
+  };
 
+  const handleHardClick = () => {
+    setDimension(20);
+  };
   return (
     <div className="relative">
       <form onSubmit={handleSubmit} className="mb-4">
         <label htmlFor="length" className="block mb-2">
-          Inserisci la dimensione del lato della tabella
+          Scegli la difficoltà di gioco
         </label>
-        <input
-          type="number"
-          name="length"
-          id="length"
-          min="3"
-          max="20"
-          required
-          className="border border-black text-black bg-slate-400 mx-2 px-2 py-1"
-          onChange={handleInputChange}
-        />
-        <button
-          type="submit"
-          className="border border-black text-black px-4 py-1 hover:bg-black hover:text-black"
-        >
-          Genera Griglia
-        </button>
+
+        <Buttons
+          color={"green"}
+          value={"Easy"}
+          isActive={false}
+          onClick={handleEasyClick}
+        ></Buttons>
+
+        <Buttons
+          color={"yellow"}
+          value={"Medium"}
+          isActive={false}
+          onClick={handleMediumClick}
+        ></Buttons>
+        <Buttons
+          color={"red"}
+          value={"Hard"}
+          isActive={false}
+          onClick={handleHardClick}
+        ></Buttons>
       </form>
       {grid && <GridComponent grid={grid} key={gameResetKey} />}
     </div>
