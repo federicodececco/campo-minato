@@ -7,13 +7,13 @@ export const supabase = createClient(supabaseUrl, supabseKey);
 export class LeaderBoardEntry {
   username: string;
   score: number;
-  difficulty: string;
+  difficulty: string | undefined;
   stage: number | undefined;
   time: number;
   constructor(
     username: string,
     score: number,
-    difficulty: string,
+    difficulty: string | undefined,
     time: number,
     stage?: number
   ) {

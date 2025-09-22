@@ -24,7 +24,8 @@ export default function EndPopUp({
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({ username: "" });
   const [leaderBoard, setLeaderBoard] = useState([]);
-  const { score, difficulty, resetGameState, time } = useGameStateContext();
+  const { score, difficulty, resetGameState, time, settings } =
+    useGameStateContext();
   const newGame = (): void => {
     resetGameState();
     handleClosePopUp;
@@ -52,10 +53,11 @@ export default function EndPopUp({
     e.preventDefault();
     setIsLoading(true);
     try {
+      console.log(settings?.difficulty);
       const entry = new LeaderBoardEntry(
         formData.username,
         score,
-        difficulty,
+        settings?.difficulty,
         time,
         1
       );

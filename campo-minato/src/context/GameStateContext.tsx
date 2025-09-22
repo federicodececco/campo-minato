@@ -84,7 +84,6 @@ export function GameStateProvider({
     setHasEnded(false);
     setTime(0);
     setScore(0);
-    setDifficulty("");
     setMaxScore(0);
     setGameResetKey((prev) => prev + 1);
     if (grid) {

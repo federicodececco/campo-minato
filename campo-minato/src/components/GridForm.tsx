@@ -6,22 +6,16 @@ import GridComponent from "./Grid";
 import { useGameStateContext } from "@/context/GameStateContext";
 import Buttons from "./Buttons";
 export default function GridForm() {
-  const [formData, setFormData] = useState({
-    length: 0,
-  });
   const [dimension, setDimension] = useState(0);
-  const { resetGameState, setSettings, grid, setGrid, gameResetKey } =
-    useGameStateContext();
-
-  function handleInputChange(e) {
-    const { name, value } = e.currentTarget;
-    console.log(formData.length);
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: parseInt(value) || 0,
-    }));
-  }
+  const [selectedDifficulty, setSelectedDifficulty] = useState("");
+  const {
+    resetGameState,
+    setSettings,
+    grid,
+    setGrid,
+    gameResetKey,
+    setDifficulty,
+  } = useGameStateContext();
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -29,19 +23,23 @@ export default function GridForm() {
     const length = dimension;
     const newGrid = new Grid(length);
     const displayGrid = generateGrid(newGrid);
-    const set = new Settings(length, "easy");
+    const set = new Settings(length, selectedDifficulty);
     setSettings(set);
+    setDifficulty(selectedDifficulty);
     setGrid(displayGrid);
   }
   const handleEasyClick = () => {
     setDimension(10);
+    setSelectedDifficulty("easy");
   };
   const handleMediumClick = () => {
     setDimension(15);
+    setSelectedDifficulty("medium");
   };
 
   const handleHardClick = () => {
     setDimension(20);
+    setSelectedDifficulty("hard");
   };
   return (
     <div className="relative">
