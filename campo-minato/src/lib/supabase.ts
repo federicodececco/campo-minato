@@ -45,11 +45,15 @@ export const saveScore = async (
   }
 };
 
-export const getLeaderBoard = async (maxEntries: number) => {
+export const getLeaderBoard = async (
+  maxEntries: number,
+  difficulty: string
+) => {
   try {
     const { data, error } = await supabase
       .from("leaderboard_entries")
       .select("*")
+      .eq("difficulty", difficulty)
       .order("score", { ascending: false })
       .limit(maxEntries);
     if (error) {

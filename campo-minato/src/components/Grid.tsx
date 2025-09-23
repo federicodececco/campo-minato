@@ -11,12 +11,13 @@ interface GridInterface {
 
 export default function GridComponent({ grid: initialGrid }: GridInterface) {
   const [grid, setGrid] = useState(initialGrid);
-  const { setHasEnded, setScore, score, setFetchedLeaderBoard } =
+  const { setHasEnded, setScore, score, setFetchedLeaderBoard, settings } =
     useGameStateContext();
 
   const fetchLeaderBoard = async () => {
+    const difficultyQuery = settings ? settings.difficulty : "";
     try {
-      const leaderBoardData = await getLeaderBoard(5);
+      const leaderBoardData = await getLeaderBoard(5, difficultyQuery);
       console.log(leaderBoardData);
       setFetchedLeaderBoard(leaderBoardData);
     } catch (error) {}
