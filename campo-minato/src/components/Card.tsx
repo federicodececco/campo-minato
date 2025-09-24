@@ -3,15 +3,26 @@ interface CardInterface {
   proximity: number;
   bomba: boolean;
   explosion: Function;
+  onRightClick: Function;
+  flag: boolean;
 }
 
-import { Bomb } from "lucide-react";
+import { Bomb, FlagTriangleRight } from "lucide-react";
 export default function Card({
   turned,
   proximity,
   bomba,
   explosion,
+  flag,
+  onRightClick,
 }: CardInterface) {
+  const handleRightClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!turned && onRightClick) {
+      onRightClick();
+    }
+  };
+
   if (turned && bomba) {
     explosion();
     return (
@@ -22,6 +33,7 @@ export default function Card({
       </>
     );
   }
+
   if (turned) {
     const getProximityColor = (num: number) => {
       const colors = {
@@ -69,6 +81,11 @@ export default function Card({
   }
 
   return (
-    <div className="w-10 h-10 bg-cell-unrevealed border-2 border-slate-700 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-zinc-500 shadow-md hover:shadow-lg active:scale-95"></div>
+    <div
+      className="w-10 h-10 bg-cell-unrevealed border-2 border-slate-700 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-zinc-500 shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center"
+      onContextMenu={handleRightClick}
+    >
+      {flag && <FlagTriangleRight className="text-red-500 w-6 h-6" />}
+    </div>
   );
 }

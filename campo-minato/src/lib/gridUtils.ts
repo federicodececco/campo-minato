@@ -1,3 +1,5 @@
+import { faL } from "@fortawesome/free-solid-svg-icons";
+
 enum Grades {
   easy = "EASY",
   medium = "MEDIUM",
@@ -26,14 +28,17 @@ export class Casella {
   bomba: boolean;
   proximity: number;
   turned: boolean;
+  flag: boolean;
   constructor(
     bomba: boolean = false,
     proximity: number = 0,
-    turned: boolean = false
+    turned: boolean = false,
+    flag: boolean = false
   ) {
     this.bomba = bomba;
     this.proximity = proximity;
     this.turned = turned;
+    this.flag = flag;
   }
 }
 

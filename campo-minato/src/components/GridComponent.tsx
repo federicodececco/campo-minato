@@ -23,7 +23,13 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
     } catch (error) {}
   };
 
-  const handleCellClick = (row: number, col: number) => {
+  const handleCellClick = (row: number, col: number, e) => {
+    e.preventDefault();
+    if (e.type === "click") {
+      console.log("Left click");
+    } else if (e.type === "contextmenu") {
+      console.log("Right click");
+    }
     grid[row][col].turned = true;
 
     if (!grid[row][col].bomba) {
@@ -35,6 +41,20 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
         gridRow.map((cell, colIndex) => {
           if (rowIndex === row && colIndex === col) {
             return { ...cell, turned: true };
+          }
+          return cell;
+        })
+      );
+      return newGrid;
+    });
+  };
+
+  const handleCellRightClick = (row: number, col: number) => {
+    setGrid((prevGrid) => {
+      const newGrid = prevGrid.map((gridRow, rowIndex) =>
+        gridRow.map((cell, colIndex) => {
+          if (rowIndex === row && colIndex === col) {
+            return { ...cell, flag: !cell.flag };
           }
           return cell;
         })
@@ -84,13 +104,15 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
         row.map((cell, colIndex) => (
           <div
             key={`${rowIndex}-${colIndex}`}
-            onClick={() => handleCellClick(rowIndex, colIndex)}
+            onClick={(e) => handleCellClick(rowIndex, colIndex, e)}
           >
             <Card
               turned={cell.turned || false}
               proximity={cell.proximity || 0}
               bomba={cell.bomba || false}
               explosion={explosion}
+              flag={cell.flag}
+              onRightClick={() => handleCellRightClick(rowIndex, colIndex)}
             />
           </div>
         ))
