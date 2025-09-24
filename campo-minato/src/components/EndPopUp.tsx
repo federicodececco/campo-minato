@@ -7,7 +7,7 @@ import { LeaderBoardEntry, saveScore } from "@/lib/supabase";
 interface EndInterface {
   victory: boolean;
   handleClosePopUp: () => void;
-  punteggioMax?: number;
+  punteggioMax: number;
 }
 
 export default function EndPopUp({
@@ -47,6 +47,18 @@ export default function EndPopUp({
       ...prev,
       [name]: value,
     }));
+  };
+
+  const getFinalMessage = (): string => {
+    if (score >= punteggioMax / 3 / 2) {
+      return "Quasi Perfetto!";
+    } else if (score >= punteggioMax / 2) {
+      return "Ottimo Lavoro!";
+    } else if (score === punteggioMax) {
+      return "VITTORIA!";
+    } else {
+      return "Potevi fare di meglio...";
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -192,7 +204,7 @@ export default function EndPopUp({
               {activeTab ? (
                 <div className="text-center space-y-6">
                   <h2 className="text-4xl font-bold text-white mb-4">
-                    {victory ? "Vittoria!" : "Game Over!"}
+                    {getFinalMessage()}
                   </h2>
 
                   <div className="bg-score-gradient text-6xl font-bold animate-gradient-shift">
