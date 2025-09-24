@@ -11,6 +11,7 @@ interface GridInterface {
 
 export default function GridComponent({ grid: initialGrid }: GridInterface) {
   const [grid, setGrid] = useState(initialGrid);
+  const [isExploding, setIsExploding] = useState(false);
   const { setHasEnded, setScore, score, setFetchedLeaderBoard, settings } =
     useGameStateContext();
 
@@ -23,15 +24,9 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
     } catch (error) {}
   };
 
-  const handleCellClick = (row: number, col: number, e) => {
-    e.preventDefault();
-    if (e.type === "click") {
-      console.log("Left click");
-    } else if (e.type === "contextmenu") {
-      console.log("Right click");
-    }
+  const handleCellClick = (row: number, col: number) => {
+    if (isExploding || grid[row][col].turned) return;
     grid[row][col].turned = true;
-
     if (!grid[row][col].bomba) {
       changeScore(grid[row][col]);
     }
@@ -50,6 +45,7 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
   };
 
   const handleCellRightClick = (row: number, col: number) => {
+    if (isExploding || grid[row][col].turned) return;
     setGrid((prevGrid) => {
       const newGrid = prevGrid.map((gridRow, rowIndex) =>
         gridRow.map((cell, colIndex) => {
@@ -62,19 +58,35 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
       return newGrid;
     });
   };
-  function changeScore(cell: Casella): void {
+  const changeScore = (cell: Casella): void => {
     setScore(
       score + cell.proximity
     ); /* punteggio dato dal valore di prossimità */
-  }
+  };
 
-  function explosion(): void {
-    setTimeout(() => {}, 100);
-    console.log("kaboom");
-    setHasEnded(true);
-  }
+  const revealBombs = (): void => {
+    setGrid((prevGrid) => {
+      const newGrid = prevGrid.map((gridRow, rowIndex) =>
+        gridRow.map((cell, colIndex) => {
+          if (cell.bomba) return { ...cell, turned: true };
+          return cell;
+        })
+      );
+      return newGrid;
+    });
+  };
 
-  function checkEnd(grid: Casella[][]): boolean {
+  const explosion = (): void => {
+    if (isExploding) return;
+    setIsExploding(true);
+    revealBombs();
+    let explosionDelay = 2000;
+    setTimeout(() => {
+      setHasEnded(true);
+    }, explosionDelay);
+  };
+
+  const checkEnd = (grid: Casella[][]): boolean => {
     grid.forEach((row) => {
       row.forEach((elem) => {
         if (!elem.bomba && !elem.turned) {
@@ -84,12 +96,13 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
     });
     setHasEnded(true);
     return true; /* each card without a bomb on it has been turned  */
-  }
+  };
   useEffect(() => {
     fetchLeaderBoard();
   }, []);
   useEffect(() => {
     setGrid(initialGrid);
+    setIsExploding(false);
   }, [initialGrid]);
 
   return (
@@ -104,7 +117,7 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
         row.map((cell, colIndex) => (
           <div
             key={`${rowIndex}-${colIndex}`}
-            onClick={(e) => handleCellClick(rowIndex, colIndex, e)}
+            onClick={(e) => handleCellClick(rowIndex, colIndex)}
           >
             <Card
               turned={cell.turned || false}
