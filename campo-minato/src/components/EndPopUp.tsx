@@ -28,7 +28,7 @@ export default function EndPopUp({
     useGameStateContext();
   const newGame = (): void => {
     resetGameState();
-    handleClosePopUp;
+    handleClosePopUp();
   };
   const calculateStars = () => {
     if (!punteggioMax || punteggioMax === 0) return 3;
@@ -113,152 +113,138 @@ export default function EndPopUp({
   }, [score]);
 
   return (
-    <>
-      <div className="bg-black/70 absolute top-0 h-screen w-screen z-10">
-        <div className="text-white absolute top-[50%] left-[50%] -translate-1/2">
-          {/* center popup */}
-          {isSaving ? (
-            <>
-              <div className="bg-green-600/50 border-4 border-amber-400 w-md h-40 relative rounded-4xl">
-                <form
-                  onSubmit={handleSubmit}
-                  action=""
-                  className=" flex flex-col items-center absolute top-[50%] left-[50%] -translate-[50%]"
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-popup rounded-2xl border-2 border-slate-600 shadow-2xl max-w-2xl w-full animate-bounce-in">
+        {isSaving ? (
+          <div className="p-8 text-center">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <h2 className="text-3xl font-bold text-white mb-6">
+                Ottimo punteggio!
+              </h2>
+              <p className="text-slate-300 text-lg">
+                Inserisci il tuo username per salvare il punteggio
+              </p>
+
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                placeholder="Il tuo username..."
+                onChange={handleInputChange}
+                className="w-full px-4 py-3 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/20 transition-all duration-200"
+              />
+
+              <div className="flex gap-4 justify-center">
+                <button
+                  type="submit"
+                  disabled={isLoading || !formData.username.trim()}
+                  className="px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-600 disabled:to-gray-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 disabled:cursor-not-allowed disabled:transform-none"
                 >
-                  <div className="text-center text-xl pb-4 ">
-                    Inserisci un username
-                  </div>
-                  <div className="text-center text-lg rounded-lg border-2 border-amber-400">
-                    <input
-                      type="text"
-                      id="username"
-                      name="username"
-                      value={formData.username}
-                      placeholder="username"
-                      className="placeholder:pl-2"
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <div className="grid grid-cols-3 pt-4 ">
-                    <button
-                      type="submit"
-                      className="col-span-1 text-xl border px-3 rounded text-amber-400 hover:bg-amber-400 duration-500"
-                    >
-                      Salva
-                    </button>
-                    <button
-                      className="  text-lg col-start-3 col-span-1 text-red-700   font-bold hover:bg-red-700 rounded-xl duration-500"
-                      onClick={handleCancel}
-                    >
-                      Cancella
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="border-3 border-black rounded-2xl p-1 bg-amber-300 w-xl h-100 grid grid-rows-10">
-                {/* button container */}
-                <div className="grid grid-cols-2 gap-0 w-full row-span-1 ">
-                  <button
-                    className="bg-green-700 rounded-tl-2xl w-full col-span-1 border-r border-black"
-                    onClick={() => {
-                      setActiveTab(true);
-                      handleClosePopUp();
-                    }}
-                  >
-                    partita
-                  </button>
-                  <button
-                    className="bg-purple-300 rounded-tr-2xl w-full col-span-1  border-l border-black"
-                    onClick={() => setActiveTab(false)}
-                  >
-                    classifica
-                  </button>
-                </div>
-                {/* page container */}
-                <div className="row-span-9">
-                  {activeTab && (
-                    <section className="bg-green-700 py-10 px-20 rounded-2xl rounded-t-none w-full h-full">
-                      <div></div>
-                      Hai Vinto!
-                      <div className="relative">
-                        <div
-                          className={`text-6xl text-white bg-clip-text bg-gradient-to-r transition-all duration-300 ${
-                            isAnimating ? "animate-pulse" : "scale-110"
-                          }`}
-                        >
-                          {displayedScore.toLocaleString()}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="flex justify-center space-x-2 ">
-                          {[0, 1, 2].map((index) => (
-                            <Star
-                              index={index}
-                              filled={index < starsNumber}
-                              showStars={showStars}
-                              key={index}
-                            />
-                          ))}
-                        </div>
-                        <div className="text-sm text-gray-400">
-                          <p>
-                            {displayedScore.toLocaleString()} /
-                            {punteggioMax
-                              ? punteggioMax.toLocaleString()
-                              : displayedScore.toLocaleString()}
-                          </p>
-                          <p className="pt-1">
-                            {starsNumber === 3 && (
-                              <span className="text-yellow-400 font-bold">
-                                Perfetto!
-                              </span>
-                            )}
-                            {starsNumber === 2 && (
-                              <span className="text-yellow-400 font-bold">
-                                Ottimo lavoro!
-                              </span>
-                            )}
-                            {starsNumber === 1 && (
-                              <span className="text-yellow-400 font-bold">
-                                Ben fatto!
-                              </span>
-                            )}
-                            {starsNumber === 0 && (
-                              <span className="text-yellow-400">
-                                Puoi fare meglio!
-                              </span>
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                      <div className=" grid grid-cols-5 pt-8">
-                        <button
-                          onClick={() => newGame()}
-                          className="text-xl bg-amber-300 text-green-700 border-black border p-2 col-span-2 rounded-xl hover:bg-green-700 hover:text-amber-300 hover:border-0"
-                        >
-                          Nuova Partita
-                        </button>
-                        <button
-                          onClick={() => {
-                            setIsSaving(true);
-                          }}
-                          className="col-start-4 col-span-2 hover:bg-amber-300 border-black hover:border p-2 text-lg rounded-xl hover:text-green-700 bg-green-700 text-amber-300 border-0"
-                        >
-                          salva
-                        </button>
-                      </div>
-                    </section>
+                  {isLoading ? (
+                    <span className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Salvando...
+                    </span>
+                  ) : (
+                    "Salva Punteggio"
                   )}
-                  {!activeTab && <Classifica />}
-                </div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsSaving(false)}
+                  className="px-6 py-3 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  Annulla
+                </button>
               </div>
-            </>
-          )}
-        </div>
+            </form>
+          </div>
+        ) : (
+          <div className="overflow-hidden rounded-2xl">
+            {/* Tab Navigation */}
+            <div className="grid grid-cols-2 bg-slate-800">
+              <button
+                className={`py-4 px-6 font-semibold text-lg transition-all duration-200 ${
+                  activeTab
+                    ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white"
+                    : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                }`}
+                onClick={() => setActiveTab(true)}
+              >
+                Risultato
+              </button>
+
+              <button
+                className={`py-4 px-6 font-semibold text-lg transition-all duration-200 ${
+                  !activeTab
+                    ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white"
+                    : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                }`}
+                onClick={() => setActiveTab(false)}
+              >
+                Classifica
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-8">
+              {activeTab ? (
+                <div className="text-center space-y-6">
+                  <h2 className="text-4xl font-bold text-white mb-4">
+                    {victory ? "Vittoria!" : "Game Over!"}
+                  </h2>
+
+                  <div className="bg-score-gradient text-6xl font-bold animate-gradient-shift">
+                    {displayedScore.toLocaleString()}
+                  </div>
+
+                  <div className="flex justify-center space-x-2 mb-6">
+                    {[0, 1, 2].map((index) => (
+                      <Star
+                        key={index}
+                        index={index}
+                        filled={index < calculateStars()}
+                        showStars={showStars}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="text-slate-300 space-y-2">
+                    <p className="text-lg">
+                      {displayedScore.toLocaleString()} /{" "}
+                      {punteggioMax?.toLocaleString() ||
+                        displayedScore.toLocaleString()}{" "}
+                      punti
+                    </p>
+                    <p className="text-xl font-semibold text-amber-400">
+                      {/*! da implementare     {getScoreMessage(calculateStars())}  */}
+                    </p>
+                  </div>
+
+                  <div className="flex gap-4 justify-center pt-6">
+                    <button
+                      onClick={() => newGame()}
+                      className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                    >
+                      Nuova Partita
+                    </button>
+
+                    <button
+                      onClick={() => setIsSaving(true)}
+                      className="px-8 py-3 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                    >
+                      Salva Punteggio
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <Classifica />
+              )}
+            </div>
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }

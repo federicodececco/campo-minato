@@ -52,14 +52,15 @@ export function generateGrid(board: Grid, bombe?: number): Casella[][] {
   const n = board.sideLength;
 
   let grid: Casella[][] = [];
-  let numBombe: number;
+  let numBombe: number = 16;
   /* crea un numero di bombe pari al 20% della board o 16, quello più piccolo */
-  if (bombe === undefined) {
+  /* if (bombe === undefined) {
     const maxBombe = Math.floor(n * n * 0.2);
     numBombe = Math.min(16, maxBombe);
   } else {
     numBombe = bombe;
-  }
+  } */
+
   /* riempie la board */
   for (let i = 0; i < n; i++) {
     grid[i] = [];

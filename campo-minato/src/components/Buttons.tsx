@@ -13,21 +13,27 @@ export default function Buttons({
 }: ButtonStyle) {
   const baseClasses = "px-3 py-1 text-lg duration-400 rounded-lg text-black";
 
-  const getColorClasses = () => {
+  const getButtonClass = () => {
+    const baseClass =
+      "px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50";
+
     switch (color) {
       case "green":
-        return "bg-emerald-400 hover:bg-emerald-700 hover:text-white";
+        return `${baseClass} bg-btn-easy text-white hover:bg-btn-easy`;
       case "yellow":
-        return "bg-yellow-400 hover:bg-yellow-700 hover:text-white";
+        return `${baseClass} bg-btn-medium text-white hover:bg-btn-medium`;
       case "red":
-        return "bg-red-400 hover:bg-red-700 hover:text-white";
+        return `${baseClass} bg-btn-hard text-white hover:bg-btn-hard`;
       default:
-        return "bg-gray-400 hover:bg-gray-700 hover:text-white";
+        return `${baseClass} bg-slate-500 hover:bg-slate-600 text-white`;
     }
   };
 
   return (
-    <button className={`${baseClasses} ${getColorClasses()}`} onClick={onClick}>
+    <button
+      className={`${getButtonClass()} ${isActive ? "ring-2 ring-white" : ""} animate-in slide-in-from-top-4 duration-300`}
+      onClick={onClick}
+    >
       {value}
     </button>
   );

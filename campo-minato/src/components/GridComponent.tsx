@@ -49,6 +49,7 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
   }
 
   function explosion(): void {
+    setTimeout(() => {}, 100);
     console.log("kaboom");
     setHasEnded(true);
   }
@@ -73,10 +74,10 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
 
   return (
     <div
-      className="grid gap-1 p-4 bg-white"
+      className="grid gap-1 p-6 bg-white/10 backdrop-blur-sm rounded-2xl border border-slate-600 shadow-xl animate-in fade-in-0 duration-500"
       style={{
         gridTemplateColumns: `repeat(${grid.length}, 1fr)`,
-        maxWidth: `${grid.length * 40}px`,
+        maxWidth: `${grid.length * 50 + 48}px`, // 48px for padding
       }}
     >
       {grid.map((row, rowIndex) =>

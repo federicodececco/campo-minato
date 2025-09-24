@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { generateGrid, Casella, Grid, Settings } from "@/lib/gridUtils";
-import GridComponent from "./Grid";
+import GridComponent from "./GridComponent";
 import { useGameStateContext } from "@/context/GameStateContext";
 import Buttons from "./Buttons";
 export default function GridForm() {
@@ -33,42 +33,52 @@ export default function GridForm() {
     setSelectedDifficulty("easy");
   };
   const handleMediumClick = () => {
-    setDimension(15);
+    setDimension(9);
     setSelectedDifficulty("medium");
   };
 
   const handleHardClick = () => {
-    setDimension(20);
+    setDimension(7);
     setSelectedDifficulty("hard");
   };
+
   return (
-    <div className="relative">
-      <form onSubmit={handleSubmit} className="mb-4">
-        <label htmlFor="length" className="block mb-2">
+    <div className="flex flex-col items-center space-y-8">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center space-y-6"
+      >
+        <label className="text-2xl font-semibold text-white text-center animate-in slide-in-from-top-4 duration-300">
           Scegli la difficoltà di gioco
         </label>
 
-        <Buttons
-          color={"green"}
-          value={"Easy"}
-          isActive={false}
-          onClick={handleEasyClick}
-        ></Buttons>
-
-        <Buttons
-          color={"yellow"}
-          value={"Medium"}
-          isActive={false}
-          onClick={handleMediumClick}
-        ></Buttons>
-        <Buttons
-          color={"red"}
-          value={"Hard"}
-          isActive={false}
-          onClick={handleHardClick}
-        ></Buttons>
+        <div className="flex flex-wrap gap-4 justify-center animate-in slide-in-from-bottom-4 duration-500">
+          <Buttons
+            color="green"
+            value="Easy"
+            isActive={selectedDifficulty === "easy"}
+            onClick={handleEasyClick}
+          />
+          <Buttons
+            color="yellow"
+            value="Medium"
+            isActive={selectedDifficulty === "medium"}
+            onClick={handleMediumClick}
+          />
+          <Buttons
+            color="red"
+            value="Hard"
+            isActive={selectedDifficulty === "hard"}
+            onClick={handleHardClick}
+          />
+        </div>
       </form>
-      {grid && <GridComponent grid={grid} key={gameResetKey} />}
+
+      {grid && (
+        <div className="animate-in slide-in-from-bottom-8 duration-700">
+          <GridComponent grid={grid} key={gameResetKey} />
+        </div>
+      )}
     </div>
   );
 }

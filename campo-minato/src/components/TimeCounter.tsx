@@ -2,8 +2,9 @@ import { useGameStateContext } from "@/context/GameStateContext";
 import { useEffect, useState } from "react";
 
 export default function TimeCounter() {
-  const { time, setTime, hasEnded, gameResetkey } = useGameStateContext();
+  const { time, setTime, hasEnded, gameResetKey } = useGameStateContext();
   const [isActive, setIsActive] = useState(true);
+
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
@@ -23,15 +24,10 @@ export default function TimeCounter() {
   useEffect(() => {
     setTime(0);
     setIsActive(true);
-  }, [gameResetkey, setTime]);
+  }, [gameResetKey, setTime]);
 
   useEffect(() => {
-    if (hasEnded) {
-      setIsActive(false);
-    }
-    if (!hasEnded) {
-      setIsActive(true);
-    }
+    setIsActive(!hasEnded);
   }, [hasEnded]);
 
   const formatTime = (seconds: number): string => {
@@ -40,8 +36,8 @@ export default function TimeCounter() {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
   return (
-    <div className="text-2xl font-bold text-gray-800 bg-gray-200 px-4 py-2 rounded-lg border-2 border-gray-400">
-      {formatTime(time)}
+    <div className="bg-timer text-3xl font-mono font-bold px-6 py-3 rounded-xl border-2 border-slate-600 text-amber-400 shadow-lg animate-in slide-in-from-top-4 duration-300">
+      <span className="drop-shadow-lg"> {formatTime(time)}</span>
     </div>
   );
 }

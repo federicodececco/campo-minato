@@ -1,4 +1,113 @@
 @import "tailwindcss";
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px #f59e0b;
+  }
+  50% {
+    box-shadow:
+      0 0 20px #f59e0b,
+      0 0 30px #f59e0b;
+  }
+}
 
+@keyframes gradient-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
 
+@keyframes bounce-in {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
 
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.animate-gradient-shift {
+  animation: gradient-shift 2s ease-in-out infinite;
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s ease-out;
+}
+
+.bg-game-gradient {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+}
+
+.bg-btn-easy {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.bg-btn-easy:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+}
+
+.bg-btn-medium {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.bg-btn-medium:hover {
+  background: linear-gradient(135deg, #d97706, #b45309);
+}
+
+.bg-btn-hard {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.bg-btn-hard:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+.bg-cell-unrevealed {
+  background: linear-gradient(145deg, #64748b, #475569);
+}
+
+.bg-cell-revealed {
+  background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
+}
+
+.bg-cell-bomb {
+  background: linear-gradient(145deg, #7f1d1d, #991b1b);
+}
+
+.bg-timer {
+  background: linear-gradient(145deg, #1e293b, #334155);
+}
+
+.bg-popup {
+  background: linear-gradient(145deg, #1e293b, #334155);
+}
+
+.bg-leaderboard {
+  background: linear-gradient(145deg, #334155, #475569);
+}
+
+.bg-leaderboard-header {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.bg-score-gradient {
+  background: linear-gradient(45deg, #f59e0b, #fbbf24, #f59e0b);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
