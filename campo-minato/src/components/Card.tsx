@@ -28,7 +28,7 @@ export default function Card({
     return (
       <>
         <div className="w-10 h-10 flex items-center justify-center bg-cell-bomb border-2 border-red-600 rounded-lg animate-pulse-glow">
-          <Bomb />
+          <Bomb data-testid="bomb-icon" />
         </div>
       </>
     );
@@ -82,6 +82,7 @@ export default function Card({
 
   return (
     <div
+      data-testid="card"
       className="w-10 h-10 bg-cell-unrevealed border-2 border-slate-700 rounded-lg cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-zinc-500 shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center"
       onContextMenu={handleRightClick}
     >
