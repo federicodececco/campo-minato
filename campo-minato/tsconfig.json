@@ -24,6 +24,7 @@
       "@/lib/":["./lib/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "test/components/Card.test.jsx"],
+  "types": ["jest", "@testing-library/jest-dom"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "test/components/Card.test.jsx", "jest.setup.ts"],
   "exclude": ["node_modules"]
 }
