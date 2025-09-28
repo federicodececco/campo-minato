@@ -46,7 +46,7 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
         description: `Bomba esplosa alla posizione (${row}, ${col})`,
         riskLevel: "high",
       });
-      setExplosions((prev) => prev + 1);
+      setExplosions((prev: number) => prev + 1);
     } else {
       const riskLevel =
         cell.proximity >= 3 ? "high" : cell.proximity >= 1 ? "medium" : "low";
@@ -58,9 +58,9 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
       });
 
       if (cell.proximity === 0) {
-        setPerfectMoves((prev) => prev + 1);
+        setPerfectMoves((prev: number) => prev + 1);
       } else if (cell.proximity >= 3) {
-        setRiskyMoves((prev) => prev + 1);
+        setRiskyMoves((prev: number) => prev + 1);
       }
 
       changeScore(cell);
@@ -97,9 +97,9 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
         description: `Bandiera piazzata alla posizione (${row}, ${col})`,
         riskLevel: "low",
       });
-      setFlagsUsed((prev) => prev + 1);
+      setFlagsUsed((prev: number) => prev + 1);
     } else {
-      setFlagsUsed((prev) => Math.max(0, prev - 1));
+      setFlagsUsed((prev: number) => Math.max(0, prev - 1));
     }
     setGrid((prevGrid) => {
       const newGrid = prevGrid.map((gridRow, rowIndex) =>

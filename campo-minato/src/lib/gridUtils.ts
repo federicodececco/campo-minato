@@ -1,5 +1,3 @@
-import { faL } from "@fortawesome/free-solid-svg-icons";
-
 enum Grades {
   easy = "EASY",
   medium = "MEDIUM",
@@ -55,7 +53,6 @@ function getRandomInt(min: number, max: number): number {
  */
 export function generateGrid(board: Grid, bombe?: number): Casella[][] {
   const n = board.sideLength;
-
   let grid: Casella[][] = [];
   let numBombe: number = 16;
   /* crea un numero di bombe pari al 20% della board o 16, quello più piccolo */

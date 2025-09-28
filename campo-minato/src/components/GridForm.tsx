@@ -17,7 +17,7 @@ export default function GridForm() {
     setDifficulty,
   } = useGameStateContext();
 
-  function handleSubmit(e) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     resetGameState();
     const length = dimension;

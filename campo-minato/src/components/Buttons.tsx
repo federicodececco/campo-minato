@@ -11,8 +11,6 @@ export default function Buttons({
   isActive,
   onClick,
 }: ButtonStyle) {
-  const baseClasses = "px-3 py-1 text-lg duration-400 rounded-lg text-black";
-
   const getButtonClass = () => {
     const baseClass =
       "px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50";

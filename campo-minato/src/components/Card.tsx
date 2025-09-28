@@ -36,7 +36,7 @@ export default function Card({
 
   if (turned) {
     const getProximityColor = (num: number) => {
-      const colors = {
+      const colors: Record<number, string> = {
         1: "text-blue-500",
         2: "text-green-500",
         3: "text-red-500",
@@ -58,7 +58,7 @@ export default function Card({
   }
   if (turned) {
     const getProximityColor = (num: number) => {
-      const colors = {
+      const colors: Record<number, string> = {
         1: "text-blue-400",
         2: "text-green-400",
         3: "text-red-400",

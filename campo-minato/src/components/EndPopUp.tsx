@@ -1,4 +1,3 @@
-import { faL } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import Star from "./Star";
 import Classifica from "./Classifica";
@@ -26,7 +25,6 @@ export default function EndPopUp({
   const [leaderBoard, setLeaderBoard] = useState([]);
   const {
     score,
-    difficulty,
     resetGameState,
     time,
     settings,
@@ -49,7 +47,7 @@ export default function EndPopUp({
   };
   const starsNumber = calculateStars();
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -69,7 +67,7 @@ export default function EndPopUp({
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -89,11 +87,6 @@ export default function EndPopUp({
       setIsLoading(false);
       newGame();
     }
-  };
-
-  const handleCancel = (e) => {
-    e.preventDefaut();
-    newGame();
   };
 
   useEffect(() => {

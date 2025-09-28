@@ -1,9 +1,6 @@
 import { LeaderBoardEntry } from "@/lib/supabase";
 import { useGameStateContext } from "@/context/GameStateContext";
 import { Medal, Trophy } from "lucide-react";
-interface LeaderBoardEntryInterface {
-  leaderBoardArray: LeaderBoardEntry[];
-}
 
 export default function Classifica() {
   const { fetchedLeaderBoard } = useGameStateContext();
