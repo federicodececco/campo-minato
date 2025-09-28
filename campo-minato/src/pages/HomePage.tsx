@@ -1,10 +1,11 @@
 "use client";
-
+import Commentary from "@/components/Commentary";
 import EndPopUp from "@/components/EndPopUp";
 import GridForm from "@/components/GridForm";
 import { useEffect, useState } from "react";
 import { useGameStateContext } from "@/context/GameStateContext";
 import TimeCounter from "@/components/TimeCounter";
+import { Comme } from "next/font/google";
 export default function HomePage() {
   const { hasEnded, setHasEnded, grid } = useGameStateContext();
   const [showTimer, setShowTimer] = useState(false);
@@ -22,6 +23,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-game-gradient p-4">
+      <Commentary />
       <div className="max-w-6xl mx-auto">
         {hasEnded && (
           <EndPopUp

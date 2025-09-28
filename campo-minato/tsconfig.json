@@ -25,6 +25,6 @@
     }
   },
   "types": ["jest", "@testing-library/jest-dom"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "test/components/Card.test.jsx", "jest.setup.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "test/components/Card.test.jsx", "jest.setup.ts", "test/components/Classifica.test.jsx"],
   "exclude": ["node_modules"]
 }

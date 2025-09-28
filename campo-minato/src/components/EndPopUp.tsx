@@ -24,8 +24,16 @@ export default function EndPopUp({
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({ username: "" });
   const [leaderBoard, setLeaderBoard] = useState([]);
-  const { score, difficulty, resetGameState, time, settings } =
-    useGameStateContext();
+  const {
+    score,
+    difficulty,
+    resetGameState,
+    time,
+    settings,
+    generateGameNarration,
+    gameNarration,
+    isGeneratingNarration,
+  } = useGameStateContext();
   const newGame = (): void => {
     resetGameState();
     handleClosePopUp();
@@ -123,6 +131,12 @@ export default function EndPopUp({
 
     return () => clearTimeout(timer);
   }, [score]);
+
+  useEffect(() => {
+    if (!gameNarration && !isGeneratingNarration) {
+      generateGameNarration();
+    }
+  }, []);
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
@@ -232,6 +246,41 @@ export default function EndPopUp({
                     <p className="text-xl font-semibold text-amber-400">
                       {/*! da implementare     {getScoreMessage(calculateStars())}  */}
                     </p>
+                  </div>
+
+                  {/* Sezione Narrazione AI */}
+                  <div className="bg-gradient-to-r from-purple-600/20 to-indigo-600/20 rounded-xl p-6 border border-purple-400/30 backdrop-blur-sm">
+                    <div className="flex items-center gap-2 mb-4">
+                      <h3 className="text-xl font-bold text-purple-300">
+                        Cronaca della Partita
+                      </h3>
+                    </div>
+
+                    {isGeneratingNarration ? (
+                      <div className="flex items-center justify-center py-8">
+                        <div className="flex flex-col items-center space-y-4">
+                          <div className="w-8 h-8 border-4 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
+                          <p className="text-purple-300 text-sm animate-pulse">
+                            L'AI sta scrivendo la cronaca della tua partita...
+                          </p>
+                        </div>
+                      </div>
+                    ) : gameNarration ? (
+                      <div className="text-slate-200 text-sm leading-relaxed bg-black/20 rounded-lg p-4 max-h-40 overflow-y-auto">
+                        <p className="whitespace-pre-line">{gameNarration}</p>
+                      </div>
+                    ) : (
+                      <div className="text-center py-4">
+                        <button
+                          onClick={() => {
+                            generateGameNarration();
+                          }}
+                          className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                        >
+                          Genera Cronaca AI
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex gap-4 justify-center pt-6">

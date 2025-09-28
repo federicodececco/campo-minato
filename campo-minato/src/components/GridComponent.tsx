@@ -12,8 +12,18 @@ interface GridInterface {
 export default function GridComponent({ grid: initialGrid }: GridInterface) {
   const [grid, setGrid] = useState(initialGrid);
   const [isExploding, setIsExploding] = useState(false);
-  const { setHasEnded, setScore, score, setFetchedLeaderBoard, settings } =
-    useGameStateContext();
+  const {
+    setHasEnded,
+    setScore,
+    score,
+    setFetchedLeaderBoard,
+    settings,
+    addGameEvent,
+    setFlagsUsed,
+    setExplosions,
+    setPerfectMoves,
+    setRiskyMoves,
+  } = useGameStateContext();
 
   const fetchLeaderBoard = async () => {
     const difficultyQuery = settings ? settings.difficulty : "";
@@ -25,7 +35,36 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
   };
 
   const handleCellClick = (row: number, col: number) => {
+    const cell = grid[row][col];
     if (isExploding || grid[row][col].turned) return;
+
+    grid[row][col].turned = true;
+
+    if (cell.bomba) {
+      addGameEvent({
+        type: "bomb_exploded",
+        description: `Bomba esplosa alla posizione (${row}, ${col})`,
+        riskLevel: "high",
+      });
+      setExplosions((prev) => prev + 1);
+    } else {
+      const riskLevel =
+        cell.proximity >= 3 ? "high" : cell.proximity >= 1 ? "medium" : "low";
+
+      addGameEvent({
+        type: "cell_revealed",
+        description: `Cella rivelata: ${cell.proximity > 0 ? `${cell.proximity} bombe vicine` : "zona sicura"}`,
+        riskLevel,
+      });
+
+      if (cell.proximity === 0) {
+        setPerfectMoves((prev) => prev + 1);
+      } else if (cell.proximity >= 3) {
+        setRiskyMoves((prev) => prev + 1);
+      }
+
+      changeScore(cell);
+    }
     grid[row][col].turned = true;
     if (!grid[row][col].bomba) {
       changeScore(grid[row][col]);
@@ -46,6 +85,22 @@ export default function GridComponent({ grid: initialGrid }: GridInterface) {
 
   const handleCellRightClick = (row: number, col: number) => {
     if (isExploding || grid[row][col].turned) return;
+    const cell = grid[row][col];
+
+    if (cell.turned) return;
+
+    const isPlacingFlag = !cell.flag;
+
+    if (isPlacingFlag) {
+      addGameEvent({
+        type: "flag_placed",
+        description: `Bandiera piazzata alla posizione (${row}, ${col})`,
+        riskLevel: "low",
+      });
+      setFlagsUsed((prev) => prev + 1);
+    } else {
+      setFlagsUsed((prev) => Math.max(0, prev - 1));
+    }
     setGrid((prevGrid) => {
       const newGrid = prevGrid.map((gridRow, rowIndex) =>
         gridRow.map((cell, colIndex) => {
