@@ -1,6 +1,7 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-const ai = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GEMINI_API_KEY!);
+import { GoogleGenAI } from "@google/genai";
+const genai = new GoogleGenAI({
+  apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY!,
+});
 export interface GameStats {
   score: number;
   time: number;
@@ -29,11 +30,13 @@ export interface GameEvent {
 }
 
 export class GameNarrator {
-  private model;
   private gameEvents: GameEvent[] = [];
+  private apiKey: string;
+  private baseUrl: string;
 
   constructor() {
-    this.model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+    this.apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY!;
+    this.baseUrl = "https://generativelanguage.googleapis.com/v1beta/models";
   }
 
   addGameEvent(event: GameEvent) {
@@ -47,9 +50,8 @@ export class GameNarrator {
     const prompt = this.createNarrationPrompt(gameStats);
 
     try {
-      const result = await this.model.generateContent(prompt);
-      const response = await result.response;
-      return response.text();
+      const response = await this.callGeminiAPI(prompt, 500);
+      return response || this.getFallbackNarration(gameStats);
     } catch (error) {
       console.error("Errore nella generazione della narrazione:", error);
       return this.getFallbackNarration(gameStats);
@@ -63,13 +65,57 @@ export class GameNarrator {
     const prompt = this.createLiveCommentaryPrompt(event, currentStats);
 
     try {
-      const result = await this.model.generateContent(prompt);
-      const response = await result.response;
-      return response.text();
+      const response = await this.callGeminiAPI(prompt, 50);
+      return response || this.getFallbackCommentary(event);
     } catch (error) {
       console.error("Errore nella generazione del commento:", error);
       return this.getFallbackCommentary(event);
     }
+  }
+
+  private async callGeminiAPI(
+    prompt: string,
+    maxTokens: number
+  ): Promise<string> {
+    const url = `${this.baseUrl}/gemini-1.5-flash:generateContent?key=${this.apiKey}`;
+
+    const requestBody = {
+      contents: [
+        {
+          parts: [
+            {
+              text: prompt,
+            },
+          ],
+        },
+      ],
+      generationConfig: {
+        temperature: 0.8,
+        topK: 40,
+        topP: 0.95,
+        maxOutputTokens: maxTokens,
+      },
+    };
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+      return data.candidates[0].content.parts[0].text;
+    }
+
+    throw new Error("Risposta API non valida");
   }
 
   private createNarrationPrompt(gameStats: GameStats): string {
